@@ -1,16 +1,19 @@
 from pages.base_page import BasePage
-from selenium.webdriver.common.by import By
+from .locators import IngredientModalLocators
 
 
 class IngredientModal(BasePage):
-    TITLE = (By.CSS_SELECTOR, ".modal__title")
-    CLOSE_BTN = (By.CSS_SELECTOR, ".modal__close")
+    def wait_for_open(self, timeout=8) -> bool:
+        """Ждёт, пока модалка откроется (заголовок виден)."""
+        return self.is_visible(IngredientModalLocators.TITLE, timeout=timeout)
 
-    def wait_for_open(self):
-        return self.is_visible(self.TITLE)
+    def is_open(self, timeout=3) -> bool:
+        """Проверяет, открыто ли окно (заголовок виден). Возвращает True/False."""
+        return self.is_visible(IngredientModalLocators.TITLE, timeout=timeout)
 
-    def close(self):
-        self.click(self.CLOSE_BTN)
+    def close(self, timeout=5) -> None:
+        """Закрывает окно по кнопке «крестик»."""
+        self.click(IngredientModalLocators.CLOSE_BTN, timeout=timeout)
 
-    def get_title(self):
-        return self.get_text(self.TITLE)
+    def get_title(self, timeout=5) -> str:
+        return self.get_text(IngredientModalLocators.TITLE, timeout=timeout)
